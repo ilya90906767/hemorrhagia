@@ -10,4 +10,6 @@ DB_USER=
 DB_PASSWORD=
 
 DJANGO_SETTINGS_MODULE=news_bot.settings
-TOKEN=""
+
+api_id = 12345
+api_hash = '0123456789abcdef0123456789abcdef'
