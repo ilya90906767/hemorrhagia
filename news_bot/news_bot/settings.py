@@ -41,7 +41,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'bot',
     'users',
-    'management'
+    'management',
+    'celery',
+    'fetcher'
 ]
 
 MIDDLEWARE = [
@@ -130,3 +132,34 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+        },
+    },
+    "root": {
+        "handlers": ["console"],
+        "level": os.getenv("DJANGO_LOG_LEVEL", "INFO"),
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["console"],
+            "level": os.getenv("DJANGO_LOG_LEVEL", "INFO"),
+            "propagate": False,
+        },
+    },
+}
+
+CELERY_BROKER_URL = 'amqp://{RABBITMQ_USER}:{RABBITMQ_PASSWORD}@rabbitmq:5672//'.format(
+    RABBITMQ_USER=os.environ['RABBITMQ_USER'],
+    RABBITMQ_PASSWORD=os.environ['RABBITMQ_PASSWORD']
+)
+CELERY_RESULT_BACKEND = 'rpc'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Europe/Moscow' # set your timezone
