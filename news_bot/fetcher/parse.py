@@ -1,15 +1,10 @@
-from celery import shared_task
-from django.conf import settings
-
 from .models import TelegramChanell, LastMessages
-from .fetcher_main import client  # Import the client variable from fetcher_main.py
 
-@shared_task
-def get_news_channels():
+def get_news_channels(client):
     channels = TelegramChanell.objects.all()
     last_messages = {}
     for channel in channels:
-        entity = client.get_entity(channel.telegram_id)
+        entity = client.get_entity(channel.id)
         message = client.get_messages(entity, limit=1)[0]
         last_messages[channel.id] = {
             'text': message.text,
@@ -22,6 +17,6 @@ def get_news_channels():
             channel_id=channel_id,
             defaults={
                 'text': message_data['text'],
-                'datetime': message_data['datetime']
+                'date': message_data['datetime']
             }
         )

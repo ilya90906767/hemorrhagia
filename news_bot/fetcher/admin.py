@@ -1,3 +1,9 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import TelegramChanell, LastMessages, FinalMessages
+
+admin.site.register(TelegramChanell)
+admin.site.register(LastMessages)
+admin.site.register(FinalMessages)
+
+# Register your models here

@@ -8,7 +8,7 @@ class TelegramChanell(models.Model):
     frequency = models.BigIntegerField(default=30*60) #freq of updating
 
 class LastMessages(models.Model):
-    chanell = models.ForeignKey(TelegramChanell, on_delete=models.CASCADE)
+    channel = models.ForeignKey(TelegramChanell, on_delete=models.CASCADE)
     text = models.TextField()
     date = models.DateTimeField()
     photo_url = models.TextField(blank=True)

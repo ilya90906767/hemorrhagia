@@ -20,7 +20,7 @@ services:
       - ./news_bot:/app
     depends_on:
       - db
-    command: python manage.py runserver 0.0.0.0:8000
+    command: sh -c "bash migrate.sh && python manage.py runserver 0.0.0.0:8000"
 
   bot:
     build: ./news_bot
@@ -37,6 +37,7 @@ services:
 
   fetcher:
     build: ./news_bot
+    stdin_open: true
     environment:
       - DJANGO_SETTINGS_MODULE=${DJANGO_SETTINGS_MODULE}
     env_file:
@@ -47,44 +48,3 @@ services:
       - db
       - django
     command: python manage.py run_fetcher
-
-  rabbitmq:
-    image: rabbitmq:3-management
-    ports:
-      - "5672:5672"
-      - "15672:15672"
-    environment:
-      - RABBITMQ_DEFAULT_USER=${RABBITMQ_USER}
-      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_PASSWORD}
-
-  celery-beat:
-    build: ./news_bot
-    environment:
-      - DJANGO_SETTINGS_MODULE=${DJANGO_SETTINGS_MODULE}
-      - CELERY_BROKER_URL=amqp://${RABBITMQ_USER}:${RABBITMQ_PASSWORD}@rabbitmq:5672//
-      - CELERY_RESULT_BACKEND=rpc
-    env_file:
-      - .env
-    volumes:
-      - ./news_bot:/app
-    depends_on:
-      - db
-      - django
-      - rabbitmq
-    command: celery -A news_bot.celery_main beat -l info
-  celery:
-    build: ./news_bot
-    environment:
-      - DJANGO_SETTINGS_MODULE=${DJANGO_SETTINGS_MODULE}
-      - CELERY_BROKER_URL=amqp://${RABBITMQ_USER}:${RABBITMQ_PASSWORD}@rabbitmq:5672//
-      - CELERY_RESULT_BACKEND=rpc
-    env_file:
-      - .env
-    volumes:
-      - ./news_bot:/app
-    depends_on:
-      - db
-      - django
-      - rabbitmq
-    command: celery -A news_bot.celery_main worker -l info
-    

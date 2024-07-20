@@ -15,7 +15,6 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         print('Fetcher polling')
         try:
-            with client:
-                client.loop.run_until_complete(main())
+            main()
         except Exception as e:
             logging.error(f"Error running main function: {e}")
