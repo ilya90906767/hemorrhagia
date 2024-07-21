@@ -6,8 +6,8 @@ from telethon.sync import TelegramClient
 from .parse import get_news_channels
 
 load_dotenv()
-api_id = os.getenv('api_id')
-api_hash = os.getenv('api_hash')
+api_id = os.getenv('API_ID')
+api_hash = os.getenv('API_HASH')
 client = TelegramClient('session_name', api_id, api_hash)
 
 def main():
