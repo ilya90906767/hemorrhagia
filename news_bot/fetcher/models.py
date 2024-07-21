@@ -11,7 +11,7 @@ class LastMessages(models.Model):
     channel = models.ForeignKey(TelegramChanell, on_delete=models.CASCADE)
     text = models.TextField()
     date = models.DateTimeField()
-    photo_url = models.TextField(blank=True)
+    media_url = models.TextField(blank=True, null=True)
     is_add = models.BooleanField(default=False)
 
     def __str__(self):

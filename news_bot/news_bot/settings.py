@@ -42,8 +42,8 @@ INSTALLED_APPS = [
     'bot',
     'users',
     'management',
-    'celery',
-    'fetcher'
+    'fetcher',
+    'gpt'
 ]
 
 MIDDLEWARE = [
