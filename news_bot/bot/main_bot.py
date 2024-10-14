@@ -1,17 +1,22 @@
 import os
-from dotenv import load_dotenv
 
 from aiogram import Bot, Dispatcher
 from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode 
 
-load_dotenv()   
+from .start_message import start_router 
+from .processing.process import processs_router
 API_TOKEN=os.getenv('TOKEN')
 
 
 async def main() -> None:
     # Dispatcher is a root router
     dp = Dispatcher()
+
+    dp.include_routers(
+        start_router,
+        processs_router
+    )
     # Register all the routers from handlers package
 
     # Initialize Bot instance with default bot properties which will be passed to all API calls
